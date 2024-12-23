@@ -54,13 +54,51 @@ sudo nginx -t && sudo systemctl restart nginx
 # Allow HTTP traffic through the firewall
 sudo ufw allow 'Nginx HTTP'
 
-# Add neofetch to .bashrc to run on SSH login
-echo "clear" >> ~/.bashrc
-echo "neofetch" >> ~/.bashrc
+# Bash aliases and configurations
+# Check if .bashrc exists
+if [ ! -f ~/.bashrc ]; then
+    echo "Creating .bashrc file..."
+    touch ~/.bashrc
+fi
+
+echo "Adding configurations to .bashrc..."
+
+if ! grep -q "alias update='sudo -- sh -c \"apt update && sudo apt dist-upgrade -y && sudo apt upgrade -y && sudo apt autoremove -y\"'" ~/.bashrc; then
+    echo -e "\n# update our debian/ubuntu box" >> ~/.bashrc
+    echo "alias update='sudo -- sh -c \"apt update && sudo apt dist-upgrade -y && sudo apt upgrade -y && sudo apt autoremove -y\"'" >> ~/.bashrc
+fi
+
+if ! grep -q "alias cron='sudo crontab -e'" ~/.bashrc; then
+    echo -e "\n# quick edit crontab" >> ~/.bashrc
+    echo "alias cron='sudo crontab -e'" >> ~/.bashrc
+fi
+
+if ! grep -q "^echo \"\"" ~/.bashrc; then
+    echo -e "\n# add blank line" >> ~/.bashrc
+    echo "echo \"\"" >> ~/.bashrc
+fi
+
+if ! grep -q "^clear" ~/.bashrc; then
+    echo -e "\n# clear default message" >> ~/.bashrc
+    echo "clear" >> ~/.bashrc
+fi
+
+# Neofetch installation
+if ! command -v neofetch &> /dev/null; then
+    echo "Installing neofetch..."
+    sudo apt update
+    sudo apt install -y neofetch
+fi
+
+if ! grep -q "^neofetch" ~/.bashrc; then
+    echo -e "\n# start neofetch at SSH login" >> ~/.bashrc
+    echo "neofetch" >> ~/.bashrc
+fi
 
 # Display the versions of Nginx and PHP
 echo "Installation complete. Versions installed:"
+neofetch -v
 nginx -v
 php -v
 
-echo "Nginx, PHP-FPM, and PHP extensions installation and configuration complete."
+echo "Neofetch, Nginx, PHP-FPM, and PHP extensions installation and configuration complete."
