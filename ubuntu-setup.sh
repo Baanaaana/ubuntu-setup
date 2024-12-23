@@ -21,6 +21,9 @@ sudo apt install -y php php-fpm php-mysql php-mbstring php-bcmath php-zip php-gd
 sudo systemctl start php8.3-fpm
 sudo systemctl enable php8.3-fpm
 
+# Install neofetch
+sudo apt install -y neofetch
+
 # Configure Nginx to use PHP-FPM
 ORIGINAL_CONF="/etc/nginx/sites-available/default"
 NEW_CONF="/etc/nginx/sites-available/default.conf"
@@ -50,6 +53,9 @@ sudo nginx -t && sudo systemctl restart nginx
 
 # Allow HTTP traffic through the firewall
 sudo ufw allow 'Nginx HTTP'
+
+# Add neofetch to .bashrc to run on SSH login
+echo "neofetch" >> ~/.bashrc
 
 # Display the versions of Nginx and PHP
 echo "Installation complete. Versions installed:"
