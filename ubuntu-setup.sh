@@ -55,6 +55,7 @@ sudo nginx -t && sudo systemctl restart nginx
 sudo ufw allow 'Nginx HTTP'
 
 # Add neofetch to .bashrc to run on SSH login
+echo "clear" >> ~/.bashrc
 echo "neofetch" >> ~/.bashrc
 
 # Display the versions of Nginx and PHP
