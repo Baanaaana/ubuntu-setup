@@ -3,6 +3,10 @@
 # Update the package list
 sudo apt update
 
+# Disable Apache2 to prevent conflicts with Nginx
+sudo systemctl stop apache2
+sudo systemctl disable apache2
+
 # Install Nginx
 sudo apt install -y nginx
 
@@ -18,11 +22,12 @@ sudo systemctl start php8.3-fpm
 sudo systemctl enable php8.3-fpm
 
 # Configure Nginx to use PHP-FPM
-NGINX_CONF="/etc/nginx/sites-available/default"
-sudo mv $NGINX_CONF $NGINX_CONF.bak
+ORIGINAL_CONF="/etc/nginx/sites-available/default"
+NEW_CONF="/etc/nginx/sites-available/default.conf"
+sudo mv $ORIGINAL_CONF $ORIGINAL_CONF.bak
 
 # Create a new Nginx configuration file
-sudo tee $NGINX_CONF > /dev/null <<EOL
+sudo tee $NEW_CONF > /dev/null <<EOL
 server {
     listen 80;
     server_name localhost;
