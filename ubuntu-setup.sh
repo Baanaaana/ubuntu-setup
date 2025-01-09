@@ -54,10 +54,13 @@ sudo nginx -t && sudo systemctl restart nginx
 # Allow HTTP traffic through the firewall
 sudo ufw allow 'Nginx HTTP'
 
-# Add a new admin user
-read -p "Enter the new admin username: " admin_user
-sudo adduser $admin_user
-sudo usermod -aG sudo $admin_user
+# Ask if a new admin user should be created
+read -p "Do you want to create a new admin user? (yes/no): " create_user
+if [[ "$create_user" == "yes" ]]; then
+    read -p "Enter the new admin username: " admin_user
+    sudo adduser $admin_user
+    sudo usermod -aG sudo $admin_user
+fi
 
 # Install and configure unattended-upgrades
 sudo apt install -y unattended-upgrades
