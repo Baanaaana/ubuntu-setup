@@ -1,6 +1,6 @@
 # Ubuntu Setup Script
 
-This repository contains a script to set up Nginx, PHP, and Neofetch on Ubuntu 24.
+This repository contains a script to set up Nginx, PHP, and Neofetch on Ubuntu 24, along with additional system configurations.
 
 ## How to Use
 
@@ -25,6 +25,9 @@ This command will download and execute the script, installing and configuring Ng
 - Backs up the original Nginx configuration file and creates a new one
 - Tests the Nginx configuration and restarts the service
 - Allows HTTP traffic through the firewall
+- Adds a new admin user with sudo privileges
+- Installs and configures unattended-upgrades for automatic security updates
+- Sets up a cron job to update and upgrade the system daily
 - Adds useful aliases and configurations to `.bashrc`
   - Includes an alias for updating the system
   - Adds a command to clear the terminal and run Neofetch on SSH login
