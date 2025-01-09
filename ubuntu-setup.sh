@@ -54,6 +54,18 @@ sudo nginx -t && sudo systemctl restart nginx
 # Allow HTTP traffic through the firewall
 sudo ufw allow 'Nginx HTTP'
 
+# Add a new admin user
+read -p "Enter the new admin username: " admin_user
+sudo adduser $admin_user
+sudo usermod -aG sudo $admin_user
+
+# Install and configure unattended-upgrades
+sudo apt install -y unattended-upgrades
+sudo dpkg-reconfigure -plow unattended-upgrades
+
+# Set up a cron job for daily updates
+(crontab -l 2>/dev/null; echo "0 3 * * * apt update && apt upgrade -y") | crontab -
+
 # Bash aliases and configurations
 # Check if .bashrc exists
 if [ ! -f ~/.bashrc ]; then
