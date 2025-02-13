@@ -1,2 +1,15 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+# TypeScript files
+*.ts text
+*.tsx text
+
+# JSON files
+*.json text
+
+# SVG files
+*.svg text
+
+# Documentation
+*.md text
