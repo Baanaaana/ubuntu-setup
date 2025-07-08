@@ -3,64 +3,8 @@
 # Update the package list
 sudo apt update
 
-# Disable Apache2 to prevent conflicts with Nginx
-sudo systemctl stop apache2
-sudo systemctl disable apache2
-
-# Install Nginx
-sudo apt install -y nginx
-
-# Start and enable Nginx to start at boot
-sudo systemctl start nginx
-sudo systemctl enable nginx
-
-# Install PHP, PHP-FPM, and additional PHP extensions
-sudo apt install -y php php-fpm php-mysql php-mbstring php-bcmath php-zip php-gd php-curl php-xml
-
-# Start and enable PHP-FPM to start at boot
-sudo systemctl start php8.3-fpm
-sudo systemctl enable php8.3-fpm
-
 # Install neofetch
 sudo apt install -y neofetch
-
-# Configure Nginx to use PHP-FPM
-ORIGINAL_CONF="/etc/nginx/sites-available/default"
-NEW_CONF="/etc/nginx/sites-available/default.conf"
-sudo mv $ORIGINAL_CONF $ORIGINAL_CONF.bak
-
-# Create a new Nginx configuration file
-sudo tee $NEW_CONF > /dev/null <<EOL
-server {
-    listen 80;
-    server_name localhost;
-    root /var/www/html;
-    index index.php index.html;
-
-    location / {
-        try_files \$uri \$uri/ =404;
-    }
-
-    location ~ \.php$ {
-        include snippets/fastcgi-php.conf;
-        fastcgi_pass unix:/run/php/php8.3-fpm.sock;
-    }
-}
-EOL
-
-# Test Nginx configuration and restart the service
-sudo nginx -t && sudo systemctl restart nginx
-
-# Allow HTTP traffic through the firewall
-sudo ufw allow 'Nginx HTTP'
-
-# Ask if a new admin user should be created
-read -p "Do you want to create a new admin user? (yes/no): " create_user
-if [[ "$create_user" == "yes" ]]; then
-    read -p "Enter the new admin username: " admin_user
-    sudo adduser $admin_user
-    sudo usermod -aG sudo $admin_user
-fi
 
 # Install and configure unattended-upgrades
 sudo apt install -y unattended-upgrades
@@ -110,10 +54,8 @@ if ! grep -q "^neofetch" ~/.bashrc; then
     echo "neofetch" >> ~/.bashrc
 fi
 
-# Display the versions of Nginx and PHP
-echo "Installation complete. Versions installed:"
+# Display the version of neofetch
+echo "Installation complete. Version installed:"
 neofetch -v
-nginx -v
-php -v
 
-echo "Neofetch, Nginx, PHP-FPM, and PHP extensions installation and configuration complete."
+echo "Neofetch installation and basic configuration complete."
