@@ -183,7 +183,7 @@ ubuntu-menu() {
 # Display welcome message with available commands
 echo ""
 echo "========================================="
-echo "    Welcome to Ubuntu Server"
+echo "    Ubuntu $(lsb_release -r -s)"
 echo "========================================="
 echo "Type 'ubuntu-menu' or 'm' to show menu"
 echo "========================================="
