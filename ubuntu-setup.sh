@@ -185,11 +185,11 @@ echo ""
 echo "========================================="
 echo "    Welcome to Ubuntu Server"
 echo "========================================="
-echo "Available Commands:"
-echo "  ubuntu-menu  - Show utility menu"
-echo "  update       - Update the system"
-echo "  cron         - Edit crontab"
+echo "Type 'ubuntu-menu' or 'm' to show menu"
 echo "========================================="
+
+# Shortcut alias for menu
+alias m='ubuntu-menu'
 EOF
     echo "Ubuntu utility menu added to .bashrc"
 fi
