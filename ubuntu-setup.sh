@@ -8,9 +8,11 @@ echo "========================================="
 echo "Updating package list..."
 sudo apt update
 
-# Install neofetch
-echo "Installing neofetch..."
-sudo apt install -y neofetch
+# Install fastfetch
+echo "Installing fastfetch..."
+sudo add-apt-repository ppa:zhangsongcui3371/fastfetch -y
+sudo apt update
+sudo apt install -y fastfetch
 
 # Install htop (interactive process viewer)
 echo "Installing htop..."
@@ -69,10 +71,10 @@ if ! grep -q "^clear" ~/.bashrc; then
     echo "clear" >> ~/.bashrc
 fi
 
-# Add neofetch to startup
-if ! grep -q "^neofetch" ~/.bashrc; then
-    echo -e "\n# start neofetch at SSH login" >> ~/.bashrc
-    echo "neofetch" >> ~/.bashrc
+# Add fastfetch to startup
+if ! grep -q "^fastfetch" ~/.bashrc; then
+    echo -e "\n# start fastfetch at SSH login" >> ~/.bashrc
+    echo "fastfetch" >> ~/.bashrc
 fi
 
 # Add the Ubuntu utility menu function to .bashrc
@@ -86,7 +88,7 @@ ubuntu-menu() {
     echo "        Ubuntu Utility Menu"
     echo "========================================="
     echo "1. System Update (full system update)"
-    echo "2. Show System Info (neofetch)"
+    echo "2. Show System Info (fastfetch)"
     echo "3. Edit Crontab"
     echo "4. View Current Cron Jobs"
     echo "5. Check Unattended Upgrades Status"
@@ -110,7 +112,7 @@ ubuntu-menu() {
             ubuntu-menu
             ;;
         2)
-            neofetch
+            fastfetch
             read -p "Press Enter to continue..."
             ubuntu-menu
             ;;
@@ -200,7 +202,7 @@ echo "========================================="
 echo "    Ubuntu Setup Complete!"
 echo "========================================="
 echo "Installed packages:"
-echo "  - neofetch (system information tool)"
+echo "  - fastfetch (system information tool)"
 echo "  - htop (interactive process viewer)"
 echo "  - tmux (terminal multiplexer)"
 echo "  - dstat (system resource statistics)"
@@ -212,7 +214,7 @@ echo "  - Daily update cron job (3:00 AM)"
 echo "  - 'update' alias for full system update"
 echo "  - 'cron' alias for quick crontab editing"
 echo "  - 'ubuntu-menu' command for utility menu"
-echo "  - neofetch on login"
+echo "  - fastfetch on login"
 echo ""
 echo "Please run: source ~/.bashrc"
 echo "Or logout and login again to apply changes"

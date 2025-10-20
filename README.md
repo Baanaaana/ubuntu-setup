@@ -47,7 +47,7 @@ bash <(curl -s https://raw.githubusercontent.com/Baanaaana/ubuntu-setup/main/ubu
 Safely removes all changes made by the ubuntu-setup.sh script.
 
 ```bash
-bash ubuntu-uninstall.sh
+bash <(curl -s https://raw.githubusercontent.com/Baanaaana/ubuntu-setup/main/ubuntu-uninstall.sh)
 ```
 
 **What it removes:**

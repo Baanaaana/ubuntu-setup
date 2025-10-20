@@ -5,7 +5,7 @@ echo "    Ubuntu Setup Uninstaller"
 echo "========================================="
 echo ""
 echo "This script will remove:"
-echo "  - Installed packages (neofetch, htop, tmux, dstat, s-tui)"
+echo "  - Installed packages (fastfetch, htop, tmux, dstat, s-tui)"
 echo "  - Unattended-upgrades configuration"
 echo "  - Custom aliases (update, cron, m)"
 echo "  - Ubuntu menu function"
@@ -24,8 +24,9 @@ echo "Starting uninstall process..."
 
 # Remove packages
 echo "Removing installed packages..."
-sudo apt remove -y neofetch htop tmux dstat s-tui stress 2>/dev/null
+sudo apt remove -y fastfetch htop tmux dstat s-tui stress 2>/dev/null
 sudo apt remove -y unattended-upgrades 2>/dev/null
+sudo add-apt-repository --remove ppa:zhangsongcui3371/fastfetch -y 2>/dev/null
 sudo apt autoremove -y
 
 # Remove cron job for daily updates
@@ -55,9 +56,9 @@ sed -i '/^echo ""$/d' ~/.bashrc 2>/dev/null
 sed -i '/# clear default message/d' ~/.bashrc 2>/dev/null
 sed -i '/^clear$/d' ~/.bashrc 2>/dev/null
 
-# Remove neofetch from startup
-sed -i '/# start neofetch at SSH login/d' ~/.bashrc 2>/dev/null
-sed -i '/^neofetch$/d' ~/.bashrc 2>/dev/null
+# Remove fastfetch from startup
+sed -i '/# start fastfetch at SSH login/d' ~/.bashrc 2>/dev/null
+sed -i '/^fastfetch$/d' ~/.bashrc 2>/dev/null
 
 # Remove Ubuntu menu function and related content
 # This removes everything from "# Ubuntu Utility Menu Function" to "alias m='ubuntu-menu'"
@@ -74,7 +75,7 @@ echo "========================================="
 echo "    Uninstall Complete!"
 echo "========================================="
 echo "Removed:"
-echo "  ✓ Packages (neofetch, htop, tmux, dstat, s-tui, unattended-upgrades)"
+echo "  ✓ Packages (fastfetch, htop, tmux, dstat, s-tui, unattended-upgrades)"
 echo "  ✓ Daily update cron job"
 echo "  ✓ Custom aliases and functions"
 echo "  ✓ .bashrc customizations"
