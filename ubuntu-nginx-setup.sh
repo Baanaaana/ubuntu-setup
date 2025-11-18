@@ -113,15 +113,17 @@ if ! grep -q "nginx_menu()" ~/.bashrc; then
 # Nginx management menu
 nginx_menu() {
     while true; do
+        clear
+        neofetch
         echo ""
         echo "================================"
         echo "   NGINX Management Menu"
         echo "================================"
-        echo "1) Edit nginx config & restart"
+        echo "1) Edit nginx config & test"
         echo "2) Go to /var/www folder"
         echo "3) View nginx error logs"
         echo "4) View nginx access logs"
-        echo "5) Test nginx configuration"
+        echo "5) Restart nginx service"
         echo "6) Exit to shell"
         echo "================================"
         read -p "Select an option [1-6]: " choice
@@ -129,13 +131,9 @@ nginx_menu() {
         case $choice in
             1)
                 sudo nano /etc/nginx/sites-available/default.conf
-                echo "Restarting nginx..."
-                sudo systemctl restart nginx
-                if [ $? -eq 0 ]; then
-                    echo "Nginx restarted successfully!"
-                else
-                    echo "Error restarting nginx. Check configuration."
-                fi
+                echo "Testing nginx configuration..."
+                sudo nginx -t
+                read -p "Press Enter to continue..."
                 ;;
             2)
                 cd /var/www
@@ -151,8 +149,13 @@ nginx_menu() {
                 sudo tail -f /var/log/nginx/access.log
                 ;;
             5)
-                echo "Testing nginx configuration..."
-                sudo nginx -t
+                echo "Restarting nginx..."
+                sudo systemctl restart nginx
+                if [ $? -eq 0 ]; then
+                    echo "Nginx restarted successfully!"
+                else
+                    echo "Error restarting nginx. Check configuration with option 1."
+                fi
                 read -p "Press Enter to continue..."
                 ;;
             6)
