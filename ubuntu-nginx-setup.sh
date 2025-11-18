@@ -63,7 +63,9 @@ sudo apt install -y unattended-upgrades
 sudo dpkg-reconfigure -plow unattended-upgrades
 
 # Set up a cron job for daily updates
-(crontab -l 2>/dev/null; echo "0 3 * * * apt update && apt upgrade -y") | crontab -
+if ! crontab -l 2>/dev/null | grep -q "0 3 \* \* \* apt update && apt upgrade -y"; then
+    (crontab -l 2>/dev/null; echo "0 3 * * * apt update && apt upgrade -y") | crontab -
+fi
 
 # Bash aliases and configurations
 # Check if .bashrc exists
