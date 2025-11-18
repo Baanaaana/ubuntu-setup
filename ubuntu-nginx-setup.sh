@@ -3,10 +3,6 @@
 # Update the package list
 sudo apt update
 
-# Disable Apache2 to prevent conflicts with Nginx
-sudo systemctl stop apache2
-sudo systemctl disable apache2
-
 # Install Nginx
 sudo apt install -y nginx
 
@@ -17,9 +13,13 @@ sudo systemctl enable nginx
 # Install PHP, PHP-FPM, and additional PHP extensions
 sudo apt install -y php php-fpm php-mysql php-mbstring php-bcmath php-zip php-gd php-curl php-xml
 
+# Detect the installed PHP version
+PHP_VERSION=$(php -r "echo PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION;")
+echo "Detected PHP version: $PHP_VERSION"
+
 # Start and enable PHP-FPM to start at boot
-sudo systemctl start php8.3-fpm
-sudo systemctl enable php8.3-fpm
+sudo systemctl start php${PHP_VERSION}-fpm
+sudo systemctl enable php${PHP_VERSION}-fpm
 
 # Install neofetch
 sudo apt install -y neofetch
@@ -43,7 +43,7 @@ server {
 
     location ~ \.php$ {
         include snippets/fastcgi-php.conf;
-        fastcgi_pass unix:/run/php/php8.3-fpm.sock;
+        fastcgi_pass unix:/run/php/php${PHP_VERSION}-fpm.sock;
     }
 }
 EOL
@@ -53,14 +53,6 @@ sudo nginx -t && sudo systemctl restart nginx
 
 # Allow HTTP traffic through the firewall
 sudo ufw allow 'Nginx HTTP'
-
-# Ask if a new admin user should be created
-read -p "Do you want to create a new admin user? (yes/no): " create_user
-if [[ "$create_user" == "yes" ]]; then
-    read -p "Enter the new admin username: " admin_user
-    sudo adduser $admin_user
-    sudo usermod -aG sudo $admin_user
-fi
 
 # Install and configure unattended-upgrades
 sudo apt install -y unattended-upgrades
@@ -110,9 +102,76 @@ if ! grep -q "^neofetch" ~/.bashrc; then
     echo "neofetch" >> ~/.bashrc
 fi
 
+# Add nginx menu function to bashrc
+if ! grep -q "nginx_menu()" ~/.bashrc; then
+    cat >> ~/.bashrc << 'MENU_EOF'
+
+# Nginx management menu
+nginx_menu() {
+    while true; do
+        echo ""
+        echo "================================"
+        echo "   NGINX Management Menu"
+        echo "================================"
+        echo "1) Edit nginx config & restart"
+        echo "2) Go to /var/www folder"
+        echo "3) View nginx error logs"
+        echo "4) View nginx access logs"
+        echo "5) Test nginx configuration"
+        echo "6) Exit to shell"
+        echo "================================"
+        read -p "Select an option [1-6]: " choice
+
+        case $choice in
+            1)
+                sudo nano /etc/nginx/sites-available/default.conf
+                echo "Restarting nginx..."
+                sudo systemctl restart nginx
+                if [ $? -eq 0 ]; then
+                    echo "Nginx restarted successfully!"
+                else
+                    echo "Error restarting nginx. Check configuration."
+                fi
+                ;;
+            2)
+                cd /var/www
+                echo "Changed directory to /var/www"
+                break
+                ;;
+            3)
+                echo "Viewing nginx error logs (Ctrl+C to exit)..."
+                sudo tail -f /var/log/nginx/error.log
+                ;;
+            4)
+                echo "Viewing nginx access logs (Ctrl+C to exit)..."
+                sudo tail -f /var/log/nginx/access.log
+                ;;
+            5)
+                echo "Testing nginx configuration..."
+                sudo nginx -t
+                read -p "Press Enter to continue..."
+                ;;
+            6)
+                echo "Exiting to shell..."
+                break
+                ;;
+            *)
+                echo "Invalid option. Please select 1-6."
+                ;;
+        esac
+    done
+}
+
+# Call nginx menu on login for interactive shells
+if [[ $- == *i* ]]; then
+    nginx_menu
+fi
+MENU_EOF
+fi
+
 # Display the versions of Nginx and PHP
 echo "Installation complete. Versions installed:"
-neofetch -v
+neofetch --version
 nginx -v
 php -v
 
