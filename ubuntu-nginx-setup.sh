@@ -48,6 +48,10 @@ server {
 }
 EOL
 
+# Remove old symlink and create new one for the config
+sudo rm -f /etc/nginx/sites-enabled/default
+sudo ln -s /etc/nginx/sites-available/default.conf /etc/nginx/sites-enabled/default.conf
+
 # Test Nginx configuration and restart the service
 sudo nginx -t && sudo systemctl restart nginx
 
